@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en"  style="width: 100%;height: 100%">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <title>Title</title>
+</head>
+<body  style="width: 100%;height: 100%">
+<header class="p-3 text-bg-dark" style="width: 100%;height: 8%">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="http://localhost:5000/world-bank/dashboard" class="nav-link px-2 text-white">Home</a></li>
+        <li><a href="#" class="nav-link px-2 text-secondary">Transfer Funds</a></li>
+        <li><a href="http://localhost:5000/world-bank/get-balance" class="nav-link px-2 text-white">Get Balance</a></li>
+        <li><a href="http://localhost:5000/world-bank/transaction-history" class="nav-link px-2 text-white">Check Transaction History</a></li>
+        <li><a href="http://localhost:5000/world-bank/add-payee" class="nav-link px-2 text-white">Add Payee</a></li>
+      </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+        <input type="search" id="usernameInputTypeWriter" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search" disabled>
+        <input type="hidden" id="tokenInput" value="{{.token}}">
+        <input type="hidden" id="claimInput" value="{{.claim}}">
+      </form>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-outline-light me-2 rounded-circle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+        </svg></button>
+        <button type="button" id="logoutButton" class="btn btn-warning">Log-out</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="form-transfer-funds m-5">
+  <form>
+    <h1 class="h3 mb-3 fw-normal m-2">Transfer Funds</h1>
+    <span class="badge text-bg-danger" id="unableToTransferFunds" style="margin-top: 5px;text-align: left; width: 99%;margin-left: 0.5%;font-size: 24px;"></span>
+
+    <div class="form-floating m-2">
+      <select class="form-select" id="floatingSelect" aria-label="Floating label select example">
+        <option value="default">Select Payee</option>
+      </select>
+      <label for="floatingSelect">Payee</label>
+      <span class="badge text-bg-danger w-100" id="inputPayee" style="margin-top: 5px;text-align: left"></span>
+    </div>
+
+    <div class="form-floating m-2">
+      <input type="text" class="form-control" id="floatingAmount" placeholder="user" required>
+      <label for="floatingAmount">Amount</label>
+      <span class="badge text-bg-danger w-100" id="inputAmount" style="margin-top: 5px;text-align: left"></span>
+    </div>
+
+    <input type="radio" class="btn-check" name="options-outlined" value="bank_account" id="success-outlined" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="success-outlined" style="margin-left: 9px">Bank Account</label>
+
+    <input type="radio" class="btn-check" name="options-outlined" value="debit_card" id="danger-outlined" autocomplete="off">
+    <label class="btn btn-outline-primary" for="danger-outlined">Debit Card</label>
+
+    <div id="bankAccountForm" style="margin-top: 5px;display: none">
+      <div class="form-check form-check-inline" style="margin-left: 9px">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" checked value="Savings">
+        <label class="form-check-label" for="inlineRadio1">Savings</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="Current">
+        <label class="form-check-label" for="inlineRadio2">Current</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="Other">
+        <label class="form-check-label" for="inlineRadio3">Other</label>
+      </div>
+
+      <div class="form-floating m-2">
+        <input type="password" class="form-control" id="floatingTransferPassword" placeholder="Password" required>
+        <label for="floatingTransferPassword">Password</label>
+        <span class="badge text-bg-danger w-100" id="inputPassword" style="margin-top: 5px;text-align: left"></span>
+      </div>
+    </div>
+
+    <div id="debitCardForm" style="margin-top: 5px;display: none">
+      <div class="form-floating m-2">
+        <input type="text" class="form-control" id="floatingCardNumber" placeholder="Card Number" required>
+        <label for="floatingCardNumber">Card Number</label>
+        <span class="badge text-bg-danger w-100" id="inputCardNumber" style="margin-top: 5px;text-align: left"></span>
+      </div>
+      <div class="form-floating m-2">
+        <input type="text" class="form-control" id="floatingCvv" placeholder="Password" required>
+        <label for="floatingCvv">CVV</label>
+        <span class="badge text-bg-danger w-100" id="inputCvv" style="margin-top: 5px;text-align: left"></span>
+      </div>
+      <div class="form-floating m-2">
+        <input type="text" class="form-control" id="floatingExpiryDate" placeholder="Password" required>
+        <label for="floatingExpiryDate">Expiry Date</label>
+        <span class="badge text-bg-danger w-100" id="inputExpiryDate" style="margin-top: 5px;text-align: left"></span>
+      </div>
+      <div class="form-floating m-2">
+        <input type="password" class="form-control" id="floatingPin" placeholder="Password" required>
+        <label for="floatingPin">Pin</label>
+        <span class="badge text-bg-danger w-100" id="inputPin" style="margin-top: 5px;text-align: left"></span>
+      </div>
+    </div>
+
+    <button class="btn btn-lg btn-primary m-2" id="transferFunds" type="submit">Transfer Funds</button>
+  </form>
+</main>
+</body>
+<script>
+  $(document).ready(async function(){
+    let token_input = $("#tokenInput"),
+            claim_input = $("#claimInput"),
+            username_type_writer = $("#usernameInputTypeWriter"),
+            logout_button = $("#logoutButton"),
+            radio_change = $(".btn-check"),
+            displayBankForm = $("#bankAccountForm"),
+            displayCardForm = $("#debitCardForm"),
+            select_payee = $("#floatingSelect"),
+            transfer_button = $("#transferFunds"),
+            span_status = $("#unableToTransferFunds"),
+            amount_input = $("#floatingAmount"),
+            password_input = $("#floatingTransferPassword"),
+            default_payee = $('#floatingSelect option[value="default"]'),
+            debit_card_number = $("#floatingCardNumber"),
+            debit_card_cvv = $("#floatingCvv"),
+            debit_card_expiry = $("#floatingExpiryDate"),
+            debit_card_pin = $("#floatingPin"),
+            span_payee_select = $("#inputPayee"),
+            span_amount = $("#inputAmount"),
+            span_password = $("#inputPassword"),
+            span_card = $("#inputCardNumber"),
+            span_cvv = $("#inputCvv"),
+            span_expiry = $("#inputExpiryDate"),
+            span_pin = $("#inputPin")
+
+    const response = await fetch('http://localhost:5000/api/v1/user?token='+token_input.val()+'&claim_id='+claim_input.val());
+    const data = await response.json();
+    console.log(data)
+    console.log(data["data"]["account_number"])
+    if (data["status"] !== "200"){
+      window.location.replace('http://localhost:5000/world-bank/');
+    } else {
+      const payeeDetailsResponse = await fetch('http://localhost:5000/api/v1/payee?account_number='+data["data"]["account_number"]);
+      const payeeData = await payeeDetailsResponse.json();
+      console.log(payeeData)
+      var index;
+      for (index = 0; index < payeeData["data"].length; index++) {
+        select_payee.append(`<option value="`+ index +`">`+payeeData["data"][index]["name"]+`</option>`)
+      }
+      let i = 0
+
+      function typeWriter() {
+        if (i < data["data"]["username"].length) {
+          var temp = username_type_writer.val() + data["data"]["username"].charAt(i);
+          username_type_writer.val(temp)
+          i++;
+          setTimeout(typeWriter, 500);
+        }
+      }
+
+      typeWriter()
+      function changeForm(){
+        var checkedValue = $("input[name='options-outlined']:checked").val();
+        if (checkedValue === "bank_account"){
+          displayBankForm.show();
+          displayCardForm.hide();
+        } else if (checkedValue === "debit_card"){
+          displayBankForm.hide();
+          displayCardForm.show();
+        }
+        span_password.text("");
+        span_card.text("");
+        span_cvv.text("");
+        span_expiry.text("");
+        span_pin.text("");
+        if (amount_input.val() !== "" && select_payee.val() !== "default"){
+          transfer_button.prop('disabled', false)
+        }
+      }
+      changeForm()
+      radio_change.change(function (){
+        changeForm()
+      })
+
+      select_payee.change(function () {
+        var optionSelected = $(this).find("option:selected");
+        var valueSelected  = optionSelected.val();
+        if (valueSelected !== "default" && span_payee_select.text() !== ""){
+          span_payee_select.text("");
+          if (amount_input.val() !== "" && (password_input.val() !== "" || (debit_card_cvv.val() !== "" && debit_card_expiry.val() !== "" && debit_card_pin.val() !== "" && debit_card_number.val() !== ""))){
+            transfer_button.prop('disabled', false)
+          }
+        } else if (valueSelected === "default"){
+          span_payee_select.text("Please Select the Payee");
+          transfer_button.prop('disabled', true)
+        }
+      });
+
+      transfer_button.click(async function(event){
+        event.preventDefault()
+        if (validTransfer()) {
+          var jsonBody, withdrawUrl,checkedValue = $("input[name='options-outlined']:checked").val()
+          console.log("Transfer Button")
+          if (checkedValue === "bank_account") {
+            jsonBody = JSON.stringify({
+              account: {
+                number: parseInt(data["data"]["account_number"]),
+                type: $("input[name='inlineRadioOptions']:checked").val(),
+                user: {
+                  password: password_input.val(),
+                  username: data["data"]["username"]
+                }
+              },
+              amount: parseInt(amount_input.val())
+            })
+            const userIDResponse = await fetch('http://localhost:5000/api/v1/user?user_email=' + data["data"]["email"]);
+            const userIDData = await userIDResponse.json();
+            withdrawUrl = 'http://localhost:5000/api/v1/bank/withdraw?user_id=' + userIDData["data"]["user_id"]
+          } else if (checkedValue === "debit_card"){
+            jsonBody = JSON.stringify({
+              amount: parseInt(amount_input.val()),
+              debit_card: {
+                cvv: parseInt(debit_card_cvv.val()),
+                number: parseInt(debit_card_number.val()),
+                pin: parseInt(debit_card_pin.val()),
+                valid_up_to: debit_card_expiry.val()
+              }
+            })
+            withdrawUrl = 'http://localhost:5000/api/v1/atm/withdraw'
+          }
+          await withdraw(jsonBody, withdrawUrl)
+        }
+      });
+
+      async function withdraw(jsonBody,withdrawUrl){
+        const withdrawResponse = await fetch(withdrawUrl, {
+
+          // Adding method type
+          method: "POST",
+
+          // Adding body or contents to send
+          body: jsonBody,
+
+          // Adding headers to the request
+          headers: {
+            "Content-type": "text/plain; charset=UTF-8"
+          }
+        });
+        const withdrawData = await withdrawResponse.json();
+        console.log(await withdrawData);
+        if (withdrawData["status"] === "201") {
+          span_status.text("Amount Withdraw Successful")
+          console.log(withdrawData)
+          await deposit()
+        } else {
+          span_status.text(withdrawData["message"])
+          console.log(withdrawData)
+        }
+      }
+
+      async function deposit(){
+          var selected = select_payee.val()
+          const depositResponse = await fetch('http://localhost:5000/api/v1/bank/deposit?user_id='+payeeData["data"][parseInt(selected)]["user_id"], {
+
+            // Adding method type
+            method: "POST",
+
+            // Adding body or contents to send
+            body: JSON.stringify({
+              account: {
+                number: parseInt(payeeData["data"][parseInt(selected)]["number"]),
+                type: payeeData["data"][parseInt(selected)]["type"],
+                user: {
+                  password: payeeData["data"][parseInt(selected)]["password"],
+                  username: payeeData["data"][parseInt(selected)]["username"]
+                }
+              },
+              amount: parseInt(amount_input.val())
+            }),
+
+            // Adding headers to the request
+            headers: {
+              "Content-type": "text/plain; charset=UTF-8"
+            }
+          });
+          const depositData = await depositResponse.json();
+          console.log(await depositData);
+          $(".form-control").val('');
+          default_payee.attr("selected", "selected");
+        $('#element option[value="no"]').attr("selected", "selected");
+        if (depositData["status"] === "201") {
+            span_status.removeClass("text-bg-danger");
+            span_status.addClass("text-bg-success");
+            span_status.text("Amount Transfer Successful")
+            console.log(depositData)
+          } else {
+            span_status.text(depositData["message"])
+            console.log(depositData)
+          }
+        i=0;
+        typeWriter()
+      }
+
+      function validTransfer(){
+        var checkedValue = $("input[name='options-outlined']:checked").val()
+        check_valid_payee()
+        check_valid_amount()
+        if (checkedValue === "bank_account") {
+          check_valid_password()
+        } else if (checkedValue === "debit_card"){
+          check_valid_card_number()
+          check_valid_cvv()
+          check_valid_expiry()
+          check_valid_pin()
+        }
+        return !transfer_button.prop('disabled');
+      }
+
+      function check_valid_payee() {
+        if (select_payee.val() === "default"){
+          span_payee_select.text("Please Select the Payee");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_payee_select.text("");
+          if (amount_input.val() !== "" && password_input.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      function check_valid_amount() {
+        if (amount_input.val() === ""){
+          span_amount.text("Please fill the Amount");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_amount.text("");
+          if (select_payee.val() !== "default" && password_input.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      function check_valid_password() {
+        if (password_input.val() === ""){
+          span_password.text("Please fill the Password");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_password.text("");
+          if (select_payee.val() !== "default" && amount_input.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      function check_valid_card_number() {
+        if (debit_card_number.val() === ""){
+          span_card.text("Please fill the valid Card Number");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_card.text("");
+          if (select_payee.val() !== "default" && amount_input.val() !== "" && debit_card_cvv.val() !== "" && debit_card_expiry.val() !== "" && debit_card_pin.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      function check_valid_cvv() {
+        if (debit_card_cvv.val() === ""){
+          span_cvv.text("Please fill the valid CVV");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_cvv.text("");
+          if (select_payee.val() !== "default" && amount_input.val() !== "" && debit_card_number.val() !== "" && debit_card_expiry.val() !== "" && debit_card_pin.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      function check_valid_expiry() {
+        if (debit_card_expiry.val() === ""){
+          span_expiry.text("Please fill the valid Expiry Date");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_expiry.text("");
+          if (select_payee.val() !== "default" && amount_input.val() !== "" && debit_card_cvv.val() !== "" && debit_card_number.val() !== "" && debit_card_pin.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+
+      function check_valid_pin() {
+        if (debit_card_pin.val() === ""){
+          span_pin.text("Please fill the valid Pin");
+          transfer_button.prop('disabled', true)
+          return false
+        } else {
+          span_pin.text("");
+          if (select_payee.val() !== "default" && amount_input.val() !== "" && debit_card_cvv.val() !== "" && debit_card_number.val() !== "" && debit_card_expiry.val() !== ""){
+            transfer_button.prop('disabled', false)
+          }
+          return true
+        }
+      }
+
+      amount_input.blur( function(){
+        check_valid_amount()
+        if (containsOnlyNumbers(amount_input.val()) === false){
+          span_amount.text("Please Enter Numbers Only");
+          transfer_button.prop('disabled', true)
+        } else {
+          span_amount.text("");
+          transfer_button.prop('disabled', false)
+        }
+      })
+
+      password_input.blur(check_valid_password)
+      debit_card_number.blur( function (){
+        check_valid_card_number()
+        if (containsOnlyNumbers(debit_card_number.val()) === false){
+          span_card.text("Please Enter Numbers Only");
+          transfer_button.prop('disabled', true)
+        } else {
+          span_card.text("");
+          transfer_button.prop('disabled', false)
+        }
+      })
+      debit_card_cvv.blur( function(){
+        check_valid_cvv()
+        if (debit_card_cvv.val().length !== 3){
+          span_cvv.text("Invalid CVV");
+          transfer_button.prop('disabled', true)
+        }
+        else if (containsOnlyNumbers(debit_card_cvv.val()) === false){
+          span_cvv.text("Please Enter Numbers Only");
+          transfer_button.prop('disabled', true)
+        } else {
+          span_cvv.text("");
+          transfer_button.prop('disabled', false)
+        }
+      })
+      debit_card_expiry.blur(check_valid_expiry)
+      debit_card_pin.blur( function(){
+        check_valid_pin()
+        if (containsOnlyNumbers(debit_card_expiry.val()) === false){
+          span_pin.text("Please Enter Numbers Only");
+          transfer_button.prop('disabled', true)
+        } else {
+          span_pin.text("");
+          transfer_button.prop('disabled', false)
+        }
+      })
+      debit_card_pin.focus(function (){
+        check_valid_payee()
+        check_valid_amount()
+        check_valid_card_number()
+        check_valid_cvv()
+        check_valid_expiry()
+      })
+      debit_card_expiry.focus(function (){
+        check_valid_payee()
+        check_valid_amount()
+        check_valid_card_number()
+        check_valid_cvv()
+      })
+      debit_card_cvv.focus(function (){
+        check_valid_payee()
+        check_valid_amount()
+        check_valid_card_number()
+      })
+      debit_card_number.focus(function (){
+        check_valid_payee()
+        check_valid_amount()
+      })
+      password_input.focus(function (){
+        check_valid_payee()
+        check_valid_amount()
+      })
+      amount_input.focus(function (){
+        check_valid_payee()
+      })
+
+      function containsOnlyNumbers(str) {
+        return /^\d+$/.test(str);
+      }
+
+      amount_input.keyup(function(e) {
+        if (e.keyCode === 8) {
+          check_valid_amount()
+          if (containsOnlyNumbers(amount_input.val()) === false){
+            span_amount.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_amount.text("");
+            transfer_button.prop('disabled', false)
+          }
+        } else {
+          if ((e.keyCode < 47 || e.keyCode > 58) && containsOnlyNumbers(amount_input.val()) === false) {
+            span_amount.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_amount.text("");
+            transfer_button.prop('disabled', false)
+          }
+        }
+      })
+
+      debit_card_number.keyup(function(e) {
+        if (e.keyCode === 8) {
+          check_valid_card_number()
+          if (containsOnlyNumbers(debit_card_number.val()) === false){
+            span_card.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_card.text("");
+            transfer_button.prop('disabled', false)
+          }
+        } else {
+          if ((e.keyCode < 47 || e.keyCode > 58) && containsOnlyNumbers(debit_card_number.val()) === false) {
+            span_card.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_card.text("");
+            transfer_button.prop('disabled', false)
+          }
+        }
+      })
+
+      debit_card_cvv.keyup(function(e) {
+        if (e.keyCode === 8) {
+          check_valid_card_number()
+          if (containsOnlyNumbers(debit_card_cvv.val()) === false){
+            span_cvv.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_cvv.text("");
+            transfer_button.prop('disabled', false)
+          }
+        } else if(debit_card_cvv.val().length >3){
+          span_cvv.text("Invalid CVV");
+          transfer_button.prop('disabled', true)
+        }else {
+          if ((e.keyCode < 47 || e.keyCode > 58) && containsOnlyNumbers(debit_card_cvv.val()) === false) {
+            span_cvv.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_cvv.text("");
+            transfer_button.prop('disabled', false)
+          }
+        }
+      })
+
+      debit_card_pin.keyup(function(e) {
+        if (e.keyCode === 8) {
+          check_valid_card_number()
+          if (containsOnlyNumbers(debit_card_pin.val()) === false){
+            span_pin.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_pin.text("");
+            transfer_button.prop('disabled', false)
+          }
+        } else {
+          if ((e.keyCode < 47 || e.keyCode > 58) && containsOnlyNumbers(debit_card_pin.val()) === false) {
+            span_pin.text("Please Enter Numbers Only");
+            transfer_button.prop('disabled', true)
+          } else {
+            span_pin.text("");
+            transfer_button.prop('disabled', false)
+          }
+        }
+      })
+
+      logout_button.click(function () {
+        if (localStorage.getItem("page") !== null) {
+          localStorage.removeItem("page");
+        }
+        location.href = "http://localhost:5000/world-bank/logout";
+      })
+    }
+  })
+
+
+</script>
+</html>

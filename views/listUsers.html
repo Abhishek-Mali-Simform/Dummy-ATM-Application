@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Users List</title>
+</head>
+<body>
+<script>
+    $(document).ready(async function(){
+        const response = await fetch('http://localhost:5000/api/v1/user');
+        const data = await response.json();
+        let i
+        let table = "<table>" +
+            "<tr>" +
+            "<th>User ID</th>" +
+            "<th>Name</th>" +
+            "<th>Username</th>" +
+            "<th>Email</th>" +
+            "<th>Contact</th>" +
+            "</tr>"
+        for (i = 0; i < data["data"].length; i++) {
+            table+= "<tr>" +
+                "<td>"+data["data"][i]["user_id"]+"</td>" +
+                "<td>"+data["data"][i]["name"]+"</td>" +
+                "<td>"+data["data"][i]["username"]+"</td>" +
+                "<td>"+data["data"][i]["email"]+"</td>" +
+                "<td>"+data["data"][i]["contact"]+"</td>" +
+                "</tr>"
+        }
+        table += "</table>"
+        $("body").append(table)
+    });
+</script>
+</body>
+</html>

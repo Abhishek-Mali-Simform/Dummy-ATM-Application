@@ -1,0 +1,2 @@
+{"level":"error","message":"strconv.Atoi: parsing \"ad\": invalid syntax"}
+{"level":"info","message":"Yo"}

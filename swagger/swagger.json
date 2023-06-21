@@ -1,0 +1,990 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "BANKING APPLICATION",
+        "description": "bank application to perform simple withdraw, deposit, check balance operation\n",
+        "version": "1.0.0",
+        "termsOfService": "http://beego.me/",
+        "contact": {
+            "email": "abhishek.m@simformsolutions.com"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "basePath": "/api/v1",
+    "paths": {
+        "/": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Login Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndLoginPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/account/register": {
+            "post": {
+                "tags": [
+                    "account"
+                ],
+                "description": "User registration with unique email and username\n\u003cbr\u003e",
+                "operationId": "AccountController.Sign Up User",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for withdrawing amount using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AccountSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.AccountInfoSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/add-payee": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Add Payee Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndAddPayeePage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/atm/check-balance": {
+            "post": {
+                "tags": [
+                    "atm"
+                ],
+                "description": "check money from an account via debit card on ATM\n\u003cbr\u003e",
+                "operationId": "ATMController.check balance",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for check remaining balance using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ATMSwaggerWithoutAmount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/atm/deposit": {
+            "post": {
+                "tags": [
+                    "atm"
+                ],
+                "description": "Deposit money to an account  using ATM and Debit Card\n\u003cbr\u003e",
+                "operationId": "ATMController.Deposit Money",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for depositing amount using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ATMSwaggerWithAmount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/atm/withdraw": {
+            "post": {
+                "tags": [
+                    "atm"
+                ],
+                "description": "Withdraw money from an account using ATM and Debit Card\n\u003cbr\u003e",
+                "operationId": "ATMController.Withdraw Money",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for withdrawing amount using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ATMSwaggerWithAmount"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/bank/accounts-info": {
+            "get": {
+                "tags": [
+                    "bank"
+                ],
+                "description": "get Account Info based on role\n\u003cbr\u003e",
+                "operationId": "BankController.Retrieve All Account Info",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "account_number",
+                        "description": "account_number to retrieve account info",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.AccountInfoSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/bank/cards-info": {
+            "get": {
+                "tags": [
+                    "bank"
+                ],
+                "description": "get Card Info based on role\n\u003cbr\u003e",
+                "operationId": "BankController.Retrieve All Card Info",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "account_number",
+                        "description": "account_number to retrieve card info",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.AccountInfoSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/bank/check-balance": {
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "description": "check money from an account via bank account\n\u003cbr\u003e",
+                "operationId": "BankController.check balance",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for check remaining balance using bank account",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BankSwaggerWithoutAmount"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "user_id",
+                        "description": "get user id. Should only be integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/bank/deposit": {
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "description": "Deposit money to an account  using Bank Account\n\u003cbr\u003e",
+                "operationId": "BankController.Deposit Money",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for depositing amount using bank account",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BankSwaggerWithAmount"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "user_id",
+                        "description": "get user id. Should only be integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/bank/withdraw": {
+            "post": {
+                "tags": [
+                    "bank"
+                ],
+                "description": "Withdraw money from an account using Bank Account\n\u003cbr\u003e",
+                "operationId": "BankController.Withdraw Money",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for withdrawing amount using bank account",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BankSwaggerWithAmount"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "user_id",
+                        "description": "get user id. Should only be integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/dashboard": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Dashboard Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndDashboardPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/default": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "get User Info based on token, id or all users\n\u003cbr\u003e",
+                "operationId": "MainController.Retrieve User(s) Info",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/get-balance": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Balance Info Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndUserBalanceInfoPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/google/callback": {
+            "get": {
+                "tags": [
+                    "google"
+                ],
+                "description": "get User Info from Google\n\u003cbr\u003e",
+                "operationId": "GoogleLoginController.Strictly Not For Swagger Use",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/google/login": {
+            "get": {
+                "tags": [
+                    "google"
+                ],
+                "description": "get User Info from Google\n\u003cbr\u003e",
+                "operationId": "GoogleLoginController.Strictly Not For Swagger Use",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Logout\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndLogout",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/microsoft/callback": {
+            "get": {
+                "tags": [
+                    "microsoft"
+                ],
+                "description": "get User Info from Microsoft\n\u003cbr\u003e",
+                "operationId": "MicrosoftLoginController.Strictly Not For Swagger Use",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/microsoft/login": {
+            "get": {
+                "tags": [
+                    "microsoft"
+                ],
+                "description": "get User Info from Microsoft\n\u003cbr\u003e",
+                "operationId": "MicrosoftLoginController.Strictly Not For Swagger Use",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/payee/": {
+            "get": {
+                "tags": [
+                    "payee"
+                ],
+                "description": "get all payee with account number\n\u003cbr\u003e",
+                "operationId": "PayeeController.Retrieve All Payee",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "account_number",
+                        "description": "account_number to retrieve payee info",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Payee"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "payee"
+                ],
+                "description": "Payee registration with account number\n\u003cbr\u003e",
+                "operationId": "PayeeController.Register Payee",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for adding payee",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.PayeeWithAccountNumber"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Payee"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/register-user": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Register Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndRegisterPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/transaction-history": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Transaction history Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndTransactionHistoryPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/transaction/": {
+            "get": {
+                "tags": [
+                    "transaction"
+                ],
+                "description": "get Transaction(s) History based on account number\n\u003cbr\u003e",
+                "operationId": "TransactionController.Retrieve Transaction(s) History Info",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "account_number",
+                        "description": "account_number to retrieve transaction info",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "Page number fo pagination. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/transaction/report": {
+            "get": {
+                "tags": [
+                    "transaction"
+                ],
+                "description": "get Transaction(s) Summary based on account number\n\u003cbr\u003e",
+                "operationId": "TransactionController.Retrieve Transaction(s) Summary Info",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "account_number",
+                        "description": "account_number to retrieve transaction info",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/transfer-funds": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Transfer Funds Page\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndTransferFundsPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/user/": {
+            "get": {
+                "tags": [
+                    "user"
+                ],
+                "description": "get User Info based on token, id or all users\n\u003cbr\u003e",
+                "operationId": "UserController.Retrieve User(s) Info",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "user_id",
+                        "description": "user_id to retrieve user info",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "token",
+                        "description": "token to retrieve user info combined with claim_id",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "claim_id",
+                        "description": "claim_id to retrieve user info combined with token",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "user_email",
+                        "description": "user_email to retrieve user info",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/user/sign-in": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "User Login to and existing account using username and password\n\u003cbr\u003e",
+                "operationId": "UserController.Sign In User",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for withdrawing amount using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwaggerLogin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Successful Message"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/user/sign-up": {
+            "post": {
+                "tags": [
+                    "user"
+                ],
+                "description": "User registration with unique email and username\n\u003cbr\u003e",
+                "operationId": "UserController.Sign Up User",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for withdrawing amount using debit card",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwagger"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.UserSwagger"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "Application/controllersMainController"
+                ],
+                "description": "Front End Get All UserPage\n\u003cbr\u003e",
+                "operationId": "MainController.FrontEndGetAllUserPage",
+                "responses": {
+                    "200": {
+                        "description": "Success Message"
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.ATMSwaggerWithAmount": {
+            "title": "ATMSwaggerWithAmount",
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "debit_card": {
+                    "$ref": "#/definitions/models.DebitCardSwagger"
+                }
+            }
+        },
+        "models.ATMSwaggerWithoutAmount": {
+            "title": "ATMSwaggerWithoutAmount",
+            "type": "object",
+            "properties": {
+                "debit_card": {
+                    "$ref": "#/definitions/models.DebitCardSwagger"
+                }
+            }
+        },
+        "models.AccountInfoSwagger": {
+            "title": "AccountInfoSwagger",
+            "type": "object",
+            "properties": {
+                "account_number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "account_type": {
+                    "type": "string"
+                },
+                "balance": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "last_transaction_date": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.AccountSwagger": {
+            "title": "AccountSwagger",
+            "type": "object",
+            "properties": {
+                "balance": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "models.AccountSwaggerWithUser": {
+            "title": "AccountSwaggerWithUser",
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "type": "string"
+                },
+                "user": {
+                    "$ref": "#/definitions/models.UserSwaggerLogin"
+                }
+            }
+        },
+        "models.AccountSwaggerWithoutUser": {
+            "title": "AccountSwaggerWithoutUser",
+            "type": "object",
+            "properties": {
+                "number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "type": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.BankSwaggerWithAmount": {
+            "title": "BankSwaggerWithAmount",
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/models.AccountSwaggerWithUser"
+                },
+                "amount": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "models.BankSwaggerWithoutAmount": {
+            "title": "BankSwaggerWithoutAmount",
+            "type": "object",
+            "properties": {
+                "account": {
+                    "$ref": "#/definitions/models.AccountSwaggerWithoutUser"
+                }
+            }
+        },
+        "models.DebitCardSwagger": {
+            "title": "DebitCardSwagger",
+            "type": "object",
+            "properties": {
+                "cvv": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "number": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "pin": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "valid_up_to": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Payee": {
+            "title": "Payee",
+            "type": "object",
+            "properties": {
+                "account_id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "payee_account_id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "payee_id": {
+                    "type": "integer",
+                    "format": "int32"
+                }
+            }
+        },
+        "models.PayeeWithAccountNumber": {
+            "title": "PayeeWithAccountNumber",
+            "type": "object",
+            "properties": {
+                "PayeeAccountNumber": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "PayeeName": {
+                    "type": "string"
+                },
+                "UserAccountNumber": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.UserSwagger": {
+            "title": "UserSwagger",
+            "type": "object",
+            "properties": {
+                "contact": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer",
+                    "format": "int32"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.UserSwaggerLogin": {
+            "title": "UserSwaggerLogin",
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "atm",
+            "description": "ATMController operations for performing withdraw, deposit, check balance\n"
+        },
+        {
+            "name": "bank",
+            "description": "BankController operations for performing withdraw, deposit, check balance\n"
+        },
+        {
+            "name": "user",
+            "description": "UserController operations for login, signup, etc\n"
+        },
+        {
+            "name": "account",
+            "description": "AccountController operations for performing registration, view balance, etc\n"
+        },
+        {
+            "name": "transaction",
+            "description": "TransactionController operations for getting transactions\n"
+        },
+        {
+            "name": "Application/controllersMainController",
+            "description": "MainController operations for front end\n"
+        }
+    ]
+}

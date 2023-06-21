@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <title>Sign-Up User</title>
+</head>
+<body>
+    <main class="form-signin m-5">
+      <form>
+        <h1 class="h3 mb-3 fw-normal m-2">Sign Up User</h1>
+
+        <div class="form-floating m-2">
+          <input type="text" class="form-control" id="floatingInputName" placeholder="Abhishek Mali" required>
+          <label for="floatingInputName">Name</label>
+          <span class="badge text-bg-danger w-100" id="inputName" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <div class="form-floating m-2">
+          <input type="email" class="form-control" id="floatingInputEmail" placeholder="name@example.com" required>
+          <label for="floatingInputEmail">Email address</label>
+          <span class="badge text-bg-danger w-100" id="inputEmail" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <div class="form-floating m-2">
+          <input type="text" class="form-control" id="floatingInputUsername" placeholder="user" required>
+          <label for="floatingInputUsername">Username</label>
+          <span class="badge text-bg-danger w-100" id="inputUsername" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <div class="form-floating m-2">
+          <input type="text" class="form-control" id="floatingInputContact" placeholder="1234567890">
+          <label for="floatingInputContact">Contact</label>
+          <span class="badge text-bg-danger w-100" id="inputContact" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <div class="form-floating m-2">
+          <input type="password" class="form-control" id="floatingPassword" placeholder="Password" required>
+          <label for="floatingPassword">Password</label>
+          <span class="badge text-bg-danger w-100" id="inputPassword" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <div class="form-floating m-2">
+          <input type="password" class="form-control" id="floatingConfirmPassword" placeholder="Password">
+          <label for="floatingConfirmPassword">Confirm Password</label>
+          <span class="badge text-bg-danger w-100" id="inputConfirmPassword" style="margin-top: 5px;text-align: left"></span>
+        </div>
+
+        <button class="btn btn-lg btn-primary m-2" id="signupSubmit" type="submit">Sign up</button>
+      </form>
+      <span id="InvalidInput" style="color: #e7040f"></span>
+    </main>
+</body>
+<script>
+  var input_name = $("#floatingInputName"),
+          input_username = $("#floatingInputUsername"),
+          input_password = document.getElementById("floatingPassword"),
+          input_confirm_password = document.getElementById("floatingConfirmPassword"),
+          input_email = $("#floatingInputEmail"),
+          input_contact = $("#floatingInputContact"),
+          sign_in_submit = $("#signupSubmit"),
+          span_name = $("#inputName"),
+          span_email = $("#inputEmail"),
+          span_username = $("#inputUsername"),
+          span_contact = $("#inputContact"),
+          span_password = $("#inputPassword"),
+          span_confirm_password = $("#inputConfirmPassword")
+
+  function validatePassword(){
+    if(input_password.value !== input_confirm_password.value) {console.log("incorrect")
+        span_confirm_password.text("Passwords Don't Match");
+        sign_in_submit.prop('disabled', true)
+    } else {
+      span_confirm_password.text("");
+      if (input_email.val() !== "" && check_contact_input() && input_username.val() !== "" && input_password.value !== "" && input_name.val() !== "") {
+        sign_in_submit.prop('disabled', false)
+      }
+    }
+  }
+
+  input_password.onchange=validatePassword;
+  input_confirm_password.onkeyup= validatePassword;
+
+  sign_in_submit.click(async function(event){
+    event.preventDefault()
+    console.log("Registering User")
+    if (validSignIn()){
+      const response = await fetch('http://localhost:5000/api/v1/user/sign-up', {
+
+        // Adding method type
+        method: "POST",
+
+        // Adding body or contents to send
+        body: JSON.stringify({
+          contact: parseInt(input_contact.val()),
+          email: input_email.val(),
+          name: input_name.val(),
+          password: input_password.value,
+          username: input_username.val()
+        }),
+
+        // Adding headers to the request
+        headers: {
+          "Content-type": "text/plain; charset=UTF-8"
+        }
+      });
+      const data = await response.json();
+      console.log(await data);
+      $(".form-control").val('');
+      if (data["status"] === "201") {
+        console.log("sdfs")
+        window.location = "http://localhost:5000/world-bank/users"
+      } else {
+        console.log("else")
+      }
+    }
+  });
+
+  function validSignIn(){
+    check_name_input()
+    check_email_input()
+    check_username_input()
+    check_password_input()
+    check_contact_input()
+    return !sign_in_submit.prop('disabled');
+  }
+
+  function check_name_input() {
+    if (input_name.val() === ""){
+      span_name.text("Please Fill The Name");
+      sign_in_submit.prop('disabled', true)
+      return false
+    } else {
+      span_name.text("");
+      if (input_email.val() !== "" && check_contact_input() && input_username.val() !== "" && input_password.value !== "" && input_password.value !==input_confirm_password.value) {
+        sign_in_submit.prop('disabled', false)
+      }
+      return true
+    }
+  }
+
+  function check_email_input() {
+    if (input_email.val() === ""){
+      span_email.text("Please Fill The Email");
+      sign_in_submit.prop('disabled', true)
+      return false
+    } else {
+      span_email.text("");
+      if (input_name.val() !== "" && check_contact_input() && input_username.val() !== "" && input_password.value !== "" && input_password.value !==input_confirm_password.value) {
+        sign_in_submit.prop('disabled', false)
+      }
+      return true
+    }
+  }
+
+  function check_username_input() {
+    if (input_username.val() === ""){
+      span_username.text("Please Fill The Username");
+      sign_in_submit.prop('disabled', true)
+      return false
+    } else {
+      span_username.text("");
+      if (input_email.val() !== "" && check_contact_input() && input_name.val() !== "" && input_password.value !== "" && input_password.value !==input_confirm_password.value) {
+        sign_in_submit.prop('disabled', false)
+      }
+      return true
+    }
+  }
+
+  function check_password_input() {
+    if (input_password.value === ""){
+      span_password.text("Please Fill The Password");
+      sign_in_submit.prop('disabled', true)
+      return false
+    } else {
+      span_password.text("");
+      if (input_email.val() !== "" && check_contact_input() && input_username.val() !== "" && input_name.val() !== "" && input_password.value !==input_confirm_password.value) {
+        sign_in_submit.prop('disabled', false)
+      }
+      return true
+    }
+  }
+
+  function check_contact_input() {
+    if (containsOnlyNumbers(input_contact.val()) === false && input_contact.val() !== "" && input_password.value !==input_confirm_password.value){
+      span_contact.text("Please Enter Numbers Only");
+      sign_in_submit.prop('disabled', true)
+      return false
+    } else {
+      span_contact.text("");
+      if (input_email.val() !== "" && input_name.val() !== "" && input_username.val() !== "" && input_password.value !== "" && input_password.value !==input_confirm_password.value) {
+        sign_in_submit.prop('disabled', false)
+      }
+      return true
+    }
+  }
+
+
+  function containsOnlyNumbers(str) {
+    return /^\d+$/.test(str);
+  }
+
+  input_name.blur(check_name_input);
+  input_email.blur(check_email_input);
+  input_username.blur(check_username_input);
+  input_password.onblur = check_password_input;
+  input_email.focus(check_name_input)
+  input_username.focus(function (){
+    check_name_input()
+    check_email_input()
+  })
+  input_contact.focus(function (){
+    check_name_input()
+    check_email_input()
+    check_username_input()
+  })
+
+  input_password.onfocus =function (){
+    check_name_input()
+    check_email_input()
+    check_username_input()
+  }
+
+  input_confirm_password.onfocus =function (){
+    check_name_input()
+    check_email_input()
+    check_username_input()
+    check_password_input()
+  }
+
+  input_contact.keyup(function(e){
+    if (e.keyCode === 8){
+        check_contact_input()
+    } else {
+      if ((e.keyCode < 47 || e.keyCode > 58) && containsOnlyNumbers(input_contact.val()) === false) {
+        span_contact.text("Please Enter Numbers Only");
+        sign_in_submit.prop('disabled', true)
+      } else {
+        span_contact.text("");
+        sign_in_submit.prop('disabled', false)
+      }
+    }
+  });
+</script>
+</html>

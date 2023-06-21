@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" style="width: 100%;height: 100%">
+<head>
+  <meta charset="UTF-8">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <title>Title</title>
+</head>
+<body style="width: 100%;height: 100%">
+<header class="p-3 text-bg-dark" style="width: 100%;height: 8%">
+  <div class="container">
+    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+        <li><a href="http://localhost:5000/world-bank/dashboard" class="nav-link px-2 text-white">Home</a></li>
+        <li><a href="http://localhost:5000/world-bank/transfer-funds" class="nav-link px-2 text-white">Transfer Funds</a></li>
+        <li><a href="http://localhost:5000/world-bank/get-balance" class="nav-link px-2 text-white">Get Balance</a></li>
+        <li><a href="#" class="nav-link px-2 text-secondary">Check Transaction History</a></li>
+        <li><a href="http://localhost:5000/world-bank/add-payee" class="nav-link px-2 text-white">Add Payee</a></li>
+      </ul>
+
+      <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+        <input type="search" id="usernameInputTypeWriter" class="form-control form-control-dark text-bg-dark" placeholder="Search..." aria-label="Search" disabled>
+        <input type="hidden" id="tokenInput" value="{{.token}}">
+        <input type="hidden" id="claimInput" value="{{.claim}}">
+      </form>
+
+      <div class="text-end">
+        <button type="button" class="btn btn-outline-light me-2 rounded-circle"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+          <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+          <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
+        </svg></button>
+        <button type="button" id="logoutButton" class="btn btn-warning">Log-out</button>
+      </div>
+    </div>
+  </div>
+</header>
+<main style="margin-left: 0;margin-top: 0;height: 92%;width: 100%;">
+  <div class="row" style="margin-left: 0;height: 15%;width: 80%;">
+  </div>
+  <div class="row" id="displayTransResult" style="margin-left: 0;height: 79%;width: 100%;">
+  </div>
+  <nav aria-label="Page navigation example" style="margin-left: 0;height: 5%;width: 100%;margin-top: 0; display: flex;justify-content: center;">
+    <ul class="pagination pagination-md" id="paginateHistory">
+
+    </ul>
+  </nav>
+</main>
+</body>
+<script>
+  $(document).ready(async function(){
+    let token_input = $("#tokenInput"),
+            claim_input = $("#claimInput"),
+            username_type_writer = $("#usernameInputTypeWriter"),
+            logout_button = $("#logoutButton"),
+            row_transaction = $("#displayTransResult"),
+            add_pages = $("#paginateHistory")
+    const response = await fetch('http://localhost:5000/api/v1/user?token='+token_input.val()+'&claim_id='+claim_input.val());
+    const data = await response.json();
+    if (data["status"] !== "200"){
+      window.location.replace('http://localhost:5000/world-bank/');
+    } else {
+      let i = 0
+
+      function typeWriter() {
+        if (i < data["data"]["username"].length) {
+          var temp = username_type_writer.val() + data["data"]["username"].charAt(i);
+          username_type_writer.val(temp)
+          i++;
+          setTimeout(typeWriter, 500);
+        }
+      }
+      var storedPage = localStorage.getItem("page");
+      if (storedPage !== null) {
+        await fetchTransaction(storedPage)
+      } else {
+        await fetchTransaction()
+      }
+      async function fetchTransaction(pageNum) {
+        row_transaction.empty()
+        add_pages.empty()
+
+
+        var page = ""
+        if (pageNum !== 0 && pageNum !== undefined){
+          page = "&page="+pageNum
+        }
+        const response1 = await fetch('http://localhost:5000/api/v1/transaction?account_number='+data["data"]["account_number"]+page);
+        const data1 = await response1.json();
+        if (data1["status"] === "200") {
+          var index
+          var table = `<table class="table table-hover">
+      <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Operation</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Transaction Date</th>
+      </tr>
+      </thead>
+      <tbody>`;
+          for (index = 0; index < data1["data"]["rows"].length; index++) {
+            table += `<tr>
+        <th scope="row">` + (index + 1) + `</th>
+        <td>` + data1["data"]["rows"][index]["operation"] + `</td>
+        <td>` + data1["data"]["rows"][index]["amount"] + `</td>
+        <td>` + timeSince(new Date(data1["data"]["rows"][index]["date_time"])) + `</td>
+      </tr>`;
+          }
+          table += `</tbody>
+    </table>`;
+          row_transaction.append(table)
+
+          var pages = ""
+
+          for (var k=0;k<data1["data"]["total_pages"];k++){
+            if ((k+1)=== data1["data"]["page"]){
+              pages += `<li class="page-item active" aria-current="page" id="page` + (k + 1) + `"><a class="page-link" href="#">` + (k + 1) + `</a></li>`
+              localStorage.setItem("page", data1["data"]["page"]);
+            } else {
+              pages += `<li class="page-item" id="page` + (k + 1) + `"><a class="page-link" href="#"
+             onclick="$.fn.NextPageData(this.text)">` + (k + 1) + `</a></li>`
+            }
+          }
+          add_pages.append(pages)
+        } else {
+          row_transaction.append("<span>No Records Found</span>")
+        }
+      }
+
+      $.fn.NextPageData = function(num) {
+        fetchTransaction(num)
+      }
+
+      function timeSince(date) {
+        // var aHour = date.getHours(),aMinute = date.getMinutes(), aSecond = date.getSeconds(), aMilisecond = date.getMilliseconds()
+        // var aDay = aHour*aMinute*aSecond*aMilisecond;
+        // date = new Date(new Date(Date.now())-aDay)
+        date.setHours(date.getHours()-5)
+        date.setMinutes(date.getMinutes()-30)
+        var seconds = Math.floor((new Date() - date) / 1000);
+
+        var interval = seconds / 31536000;
+
+        if (interval > 1) {
+          return Math.floor(interval) + " years";
+        }
+        interval = seconds / 2592000;
+        if (interval > 1) {
+          return Math.floor(interval) + " months";
+        }
+        interval = seconds / 86400;
+        if (interval > 1) {
+          return Math.floor(interval) + " days";
+        }
+        interval = seconds / 3600;
+        if (interval > 1) {
+          return Math.floor(interval) + " hours";
+        }
+        interval = seconds / 60;
+        if (interval > 1) {
+          return Math.floor(interval) + " minutes";
+        }
+        return Math.floor(seconds) + " seconds";
+      }
+
+
+
+      typeWriter()
+      logout_button.click(function () {
+        if (localStorage.getItem("page") !== null) {
+          localStorage.removeItem("page");
+        }
+        location.href = "http://localhost:5000/world-bank/logout";
+      })
+
+    }
+
+  })
+
+
+
+
+</script>
+</html>
